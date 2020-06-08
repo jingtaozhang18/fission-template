@@ -13,11 +13,11 @@ http_method = "POST"
 publish: package_source_code create_func create_http_trigger
 
 create_func:
-	fission function create --entrypoint "main.main" --buildcmd "./build.sh" --name $(func_name) --fns $(func_ns) \
+	fission function create --entrypoint "main.main" --buildcmd "./src/build.sh" --name $(func_name) --fns $(func_ns) \
 							--env $(env_name) --envns $(env_ns) --src func.zip
 
 update_func: package_source_code
-	fission function update --entrypoint "main.main" --buildcmd "./build.sh" --name $(func_name) --fns $(func_ns) \
+	fission function update --entrypoint "main.main" --buildcmd "./src/build.sh" --name $(func_name) --fns $(func_ns) \
 							--env $(env_name) --envns $(env_ns) --src func.zip
 
 create_http_trigger:
@@ -30,7 +30,7 @@ test_func:
 	fission fn test --name $(func_name) --fns $(func_ns)
 
 package_source_code:
-	zip -jr func.zip src
+	zip -rq func.zip src
 
 remove_fission_source:
 	fission function delete --name $(func_name) --fns $(func_ns)
