@@ -32,6 +32,6 @@
 * `http_method` HTTP触发器的方法
 
 #### 命令介绍
-`make publish` 会直接将函数提交到集群中，并且会自动创建http-trigger
-`make remove_fission_source` 会将创建的函数和trigger删除掉
-`make update_func` 更新函数
+* `make publish` 会直接将函数提交到集群中，并且会自动创建http-trigger
+* `make remove_fission_source` 会将创建的函数和trigger删除掉
+* `make update_func` 更新函数
