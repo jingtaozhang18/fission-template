@@ -1,0 +1,9 @@
+{
+    "item_name": "fission-try(生成项目在文件夹中的名字)",
+    "project_name": "xxx",
+    "module_name": "xxx",
+    "env_name": "xxx",
+    "env_ns": "default",
+    "func_name": "xxx",
+    "http_method": "POST"
+}

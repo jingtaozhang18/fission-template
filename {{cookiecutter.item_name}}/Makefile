@@ -1,14 +1,14 @@
-project_name = "jingtao"
-module_name = "play"
+project_name = {{cookiecutter.project_name}}
+module_name = {{cookiecutter.module_name}}
 
-env_name = "python"
-env_ns = "default"
+env_name = {{cookiecutter.env_name}}
+env_ns = {{cookiecutter.env_ns}}
 
-func_name = "request"
+func_name = {{cookiecutter.func_name}}
 func_ns = $(project_name)-$(module_name)
 
 trigger_ns = $(func_ns)
-http_method = "POST"
+http_method = {{cookiecutter.http_method}}
 
 publish: package_source_code create_func create_http_trigger
 

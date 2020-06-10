@@ -29,9 +29,16 @@
 * `func_name` 函数名称
 * `func_ns = $(project_name)-$(module_name)` 函数将会提交到`$(func_ns)`的命名空间中。
 * `trigger_ns = $(func_ns)` 触发器所在的命名空间，默认和函数的命名空间一样
-* `http_method` HTTP触发器的方法
+* `http_method` HTTP触发器的方法，可选项`GET|POST|PUT|DELETE|HEAD`
 
 #### 命令介绍
 * `make publish` 会直接将函数提交到集群中，并且会自动创建http-trigger
 * `make remove_fission_source` 会将创建的函数和trigger删除掉
 * `make update_func` 更新函数
+
+### 使用模板创建自己的项目
+``` bash
+cookiecutter https://git.huxiang.pro/base/fission/fission-template.git
+```
+
+模板中的`item_name`是创建在本地文件夹的名字
