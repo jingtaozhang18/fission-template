@@ -10,6 +10,8 @@ func_ns = $(project_name)-$(module_name)
 trigger_ns = $(func_ns)
 http_method = {{cookiecutter.http_method}}
 
+export FISSION_NAMESPACE=fission
+
 publish: package_source_code create_func create_http_trigger
 
 create_func:
