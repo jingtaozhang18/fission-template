@@ -10,34 +10,41 @@ func_ns = $(project_name)-$(module_name)
 trigger_ns = $(func_ns)
 http_method = {{cookiecutter.http_method}}
 
-export FISSION_NAMESPACE=fission
+topic_name = {{cookiecutter.topic_name}}  # todo 如果需要使用消息队列触发，请修改这里
+
+fission_namespace = "fission"
 
 publish: package_source_code create_func create_http_trigger
 
 create_func:
-	fission function create --entrypoint "main.main" --buildcmd "./src/build.sh" --name $(func_name) --fns $(func_ns) \
+	FISSION_NAMESPACE=$(fission_namespace) fission function create --entrypoint "main.main" --buildcmd "./src/build.sh" --name $(func_name) --fns $(func_ns) \
 							--env $(env_name) --envns $(env_ns) --src func.zip
 
 update_func: package_source_code
-	fission function update --entrypoint "main.main" --buildcmd "./src/build.sh" --name $(func_name) --fns $(func_ns) \
+	FISSION_NAMESPACE=$(fission_namespace) fission function update --entrypoint "main.main" --buildcmd "./src/build.sh" --name $(func_name) --fns $(func_ns) \
 							--env $(env_name) --envns $(env_ns) --src func.zip
 
 create_http_trigger:
-	fission httptrigger create --function $(func_name) --fns $(func_ns) \
-							   --url $(func_ns)/$(func_name)/default \
+	FISSION_NAMESPACE=$(fission_namespace) fission httptrigger create --function $(func_name) --fns $(func_ns) \
+							   --url $(func_ns)/$(func_name) \
 							   --method $(http_method) \
-							   --name $(func_name)-default
+							   --name $(func_name)-http
+
+create_mqtrigger:
+	FISSION_NAMESPACE=$(fission_namespace) fission mqtrigger create --name $(func_name)-mq --topic $(topic_name) \
+		--resptopic $(func_ns)-$(func_name)-response --errortopic $(func_ns)-$(func_name)-error \
+		--contenttype "application/json" --maxretries 3 \
+		--mqtype kafka --function $(func_name) --fns  $(func_ns)
 
 test_func:
-	fission fn test --name $(func_name) --fns $(func_ns)
+	FISSION_NAMESPACE=$(fission_namespace) fission fn test --name $(func_name) --fns $(func_ns)
 
 package_source_code:
 	zip -rq func.zip src
 
 remove_fission_source:
-	fission function delete --name $(func_name) --fns $(func_ns)
-	fission httptrigger delete --name $(func_name)-default --triggerns $(func_ns)
-
+	FISSION_NAMESPACE=$(fission_namespace) fission function delete --name $(func_name) --fns $(func_ns)
+	FISSION_NAMESPACE=$(fission_namespace) fission httptrigger delete --name $(func_name)-default --triggerns $(func_ns)
 
 clean:
 	rm -f func.zip
