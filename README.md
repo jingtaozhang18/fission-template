@@ -30,11 +30,13 @@
 * `func_ns = $(project_name)-$(module_name)` 函数将会提交到`$(func_ns)`的命名空间中。
 * `trigger_ns = $(func_ns)` 触发器所在的命名空间，默认和函数的命名空间一样
 * `http_method` HTTP触发器的方法，可选项`GET|POST|PUT|DELETE|HEAD`
+* `topic-name` 若使用消息队列进行触发的话，可以填此配置
 
 #### 命令介绍
 * `make publish` 会直接将函数提交到集群中，并且会自动创建http-trigger
 * `make remove_fission_source` 会将创建的函数和trigger删除掉
 * `make update_func` 更新函数
+* `make create_mqtrigger` 添加消息队列的触发，消费$(topic-name)中的消息，并将结果上传到到$(func_ns)-$(func_name)-response的topic中，处理错误的上传到$(func_ns)-$(func_name)-error的topic中
 
 ### 使用模板创建自己的项目
 ``` bash
