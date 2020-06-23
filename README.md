@@ -36,6 +36,7 @@
 * `make publish` 会直接将函数提交到集群中，并且会自动创建http-trigger
 * `make remove_fission_source` 会将创建的函数和trigger删除掉
 * `make update_func` 更新函数
+* `make see_log` 查看函数日志
 * `make create_mqtrigger` 添加消息队列的触发，消费$(topic-name)中的消息，并将结果上传到到$(func_ns)-$(func_name)-response的topic中，处理错误的上传到$(func_ns)-$(func_name)-error的topic中
 
 ### 使用模板创建自己的项目

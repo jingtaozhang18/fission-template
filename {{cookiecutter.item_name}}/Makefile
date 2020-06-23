@@ -39,6 +39,9 @@ create_mqtrigger:
 test_func:
 	FISSION_NAMESPACE=$(fission_namespace) fission fn test --name $(func_name) --fns $(func_ns)
 
+see_log:
+	FISSION_NAMESPACE=$(fission_namespace) fission fn log --name $(func_name) --fns $(func_ns) -f
+
 package_source_code:
 	zip -rq func.zip src
 
