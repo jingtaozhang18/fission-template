@@ -30,22 +30,22 @@ create_http_trigger:
 							   --name $(http_triger_name)
 	echo "your httptrigger path is $(func_ns)/$(func_name)"
 
+create_mq_trigger:
+	FISSION_NAMESPACE=$(fission_namespace) fission mqtrigger create --name $(mq_trigger_name) --topic $(topic_name) \
+		--resptopic $(func_ns)-$(func_name)-response --errortopic $(func_ns)-$(func_name)-error \
+		--contenttype "application/json" --maxretries 3 \
+		--mqtype kafka --function $(func_name) --fns $(func_ns)
+
 update_func: package_source_code
 	FISSION_NAMESPACE=$(fission_namespace) fission function update --entrypoint "main.main" --buildcmd "./src/build.sh" --name $(func_name) --fns $(func_ns) \
 							--env $(env_name) --envns $(env_ns) --src func.zip
 
-update_topic:
+update_mq_trigger:
 	# 若不需要resptopic和errortopic, 请自行删除这两个配置
 	FISSION_NAMESPACE=$(fission_namespace) fission mqtrigger update --name $(mq_trigger_name) --topic $(topic_name) \
 		--resptopic $(func_ns)-$(func_name)-response --errortopic $(func_ns)-$(func_name)-error \
 		--contenttype "application/json" --maxretries 3 \
 		--function $(func_name) --triggerns $(trigger_ns)
-
-create_mqtrigger:
-	FISSION_NAMESPACE=$(fission_namespace) fission mqtrigger create --name $(mq_trigger_name) --topic $(topic_name) \
-		--resptopic $(func_ns)-$(func_name)-response --errortopic $(func_ns)-$(func_name)-error \
-		--contenttype "application/json" --maxretries 3 \
-		--mqtype kafka --function $(func_name) --fns $(func_ns)
 
 test_func:
 	FISSION_NAMESPACE=$(fission_namespace) fission fn test --name $(func_name) --fns $(func_ns)
