@@ -33,15 +33,16 @@
 * `topic-name` 若使用消息队列进行触发的话，可以填此配置
 
 #### 命令介绍
-* `make publish` 会直接将函数提交到集群中，并且会自动创建http-trigger
-* `make remove_fission_source` 会将创建的函数和trigger删除掉
+* `make publish` 会直接将函数提交到集群中，并且会自动创建http-trigger，**但不会创建mq-trigger**。
+* `make remove_fission_source` 会将创建的**函数**和**http-trigger**删除掉，**但不会删除mq-trigger**
 * `make update_func` 更新函数
-* `make see_log` 查看函数日志
+* `make see_log` 查看函数日志，默认展示执行了这个命令后的函数日志，**需要使用开发机上的`/usr/local/bin`目录下的fission命令，若执行出错，请先`which fission`检查fission命令是否是`/usr/local/bin`下的fission**
 * `make create_mqtrigger` 添加消息队列的触发，消费$(topic-name)中的消息，并将结果上传到到$(func_ns)-$(func_name)-response的topic中，处理错误的上传到$(func_ns)-$(func_name)-error的topic中
 
 ### 使用模板创建自己的项目
 ``` bash
-cookiecutter https://git.huxiang.pro/base/fission/fission-template.git
+cookiecutter https://git.huxiang.pro/base/fission/fission-template.git 或者
+cookiecutter git@git.huxiang.pro:base/fission/fission-template.git
 ```
 
 模板中的`item_name`是创建在本地文件夹的名字
