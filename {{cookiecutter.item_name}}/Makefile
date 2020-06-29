@@ -10,18 +10,24 @@ http_method = {{cookiecutter.http_method}}
 
 topic_name = {{cookiecutter.topic_name}}
 
+# 默认生成的函数命名空间、触发器的命名空间、HTTP Triger 名称，以及 MQ Trigger 名称
 func_ns = $(project_name)-$(module_name)
 trigger_ns = $(func_ns)
 http_triger_name = $(func_name)-http
 mq_trigger_name = $(func_name)-mq
 
+# 允许函数空闲时长
+idletimeout = 120
+# 允许函数执行的时长
+fntimeout = 60
+# fission controller 组件所在的命名空间
 fission_namespace = "fission"
 
 publish: package_source_code create_func create_http_trigger
 
 create_func:
 	FISSION_NAMESPACE=$(fission_namespace) fission function create --entrypoint "main.main" --buildcmd "./src/build.sh" --name $(func_name) --fns $(func_ns) \
-							--env $(env_name) --envns $(env_ns) --src func.zip
+							--env $(env_name) --envns $(env_ns) --src func.zip --fntimeout=$(fntimeout) --idletimeout=$(idletimeout)
 
 create_http_trigger:
 	FISSION_NAMESPACE=$(fission_namespace) fission httptrigger create --function $(func_name) --fns $(func_ns) \
@@ -38,7 +44,7 @@ create_mq_trigger:
 
 update_func: package_source_code
 	FISSION_NAMESPACE=$(fission_namespace) fission function update --entrypoint "main.main" --buildcmd "./src/build.sh" --name $(func_name) --fns $(func_ns) \
-							--env $(env_name) --envns $(env_ns) --src func.zip
+							--env $(env_name) --envns $(env_ns) --src func.zip --fntimeout=$(fntimeout) --idletimeout=$(idletimeout)
 
 update_mq_trigger:
 	# 若不需要resptopic和errortopic, 请自行删除这两个配置
