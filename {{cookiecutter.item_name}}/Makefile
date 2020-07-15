@@ -46,7 +46,7 @@ create_mq_trigger:
 		--mqtype kafka --function $(func_name) --fns $(func_ns)
 
 create_cron_trigger:
-	FISSION_NAMESPACE=$(fission_namespace) fission timetrigger create --cron $(cron_setting) --function $(func_name) \
+	FISSION_NAMESPACE=$(fission_namespace) fission timetrigger create --cron "$(cron_setting)" --function $(func_name) \
 		--name $(time_trigger_name) --fns $(func_ns)
 
 update_func: package_source_code
