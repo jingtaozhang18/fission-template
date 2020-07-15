@@ -10,11 +10,14 @@ http_method = {{cookiecutter.http_method}}
 
 topic_name = {{cookiecutter.topic_name}}
 
+cron_setting = {{cookiecutter.cron_setting}}
+
 # 默认生成的函数命名空间、触发器的命名空间、HTTP Triger 名称，以及 MQ Trigger 名称
 func_ns = $(project_name)-$(module_name)
 trigger_ns = $(func_ns)
 http_triger_name = $(func_name)-http
 mq_trigger_name = $(func_name)-mq
+time_trigger_name = $(func_name)-time
 
 # 允许函数空闲时长
 idletimeout = 120
@@ -41,6 +44,10 @@ create_mq_trigger:
 		--resptopic $(func_ns)-$(func_name)-response --errortopic $(func_ns)-$(func_name)-error \
 		--contenttype "application/json" --maxretries 3 \
 		--mqtype kafka --function $(func_name) --fns $(func_ns)
+
+create_cron_trigger:
+	FISSION_NAMESPACE=$(fission_namespace) fission timetrigger create --cron $(cron_setting) --function $(func_name) \
+		--name $(time_trigger_name) --fns $(func_ns)
 
 update_func: package_source_code
 	FISSION_NAMESPACE=$(fission_namespace) fission function update --entrypoint "main.main" --buildcmd "./src/build.sh" --name $(func_name) --fns $(func_ns) \
