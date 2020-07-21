@@ -15,7 +15,7 @@ cron_setting = {{cookiecutter.cron_setting}}
 # 默认生成的函数命名空间、触发器的命名空间、HTTP Triger 名称，以及 MQ Trigger 名称
 func_ns = $(project_name)-$(module_name)
 trigger_ns = $(func_ns)
-http_triger_name = $(func_name)-http
+http_trigger_name = $(func_name)-http
 mq_trigger_name = $(func_name)-mq
 time_trigger_name = $(func_name)-time
 
@@ -36,7 +36,7 @@ create_http_trigger:
 	FISSION_NAMESPACE=$(fission_namespace) fission httptrigger create --function $(func_name) --fns $(func_ns) \
 							   --url $(func_ns)/$(func_name) \
 							   --method $(http_method) \
-							   --name $(http_triger_name)
+							   --name $(http_trigger_name)
 	echo "your httptrigger path is $(func_ns)/$(func_name)"
 
 create_mq_trigger:
@@ -72,7 +72,7 @@ package_source_code: clean
 
 remove_func_and_http_trigger:
 	FISSION_NAMESPACE=$(fission_namespace) fission function delete --name $(func_name) --fns $(func_ns)
-	FISSION_NAMESPACE=$(fission_namespace) fission httptrigger delete --name $(http_triger_name) --triggerns $(trigger_ns)
+	FISSION_NAMESPACE=$(fission_namespace) fission httptrigger delete --name $(http_trigger_name) --triggerns $(trigger_ns)
 
 remove_mq_trigger:
 	FISSION_NAMESPACE=$(fission_namespace) fission mqtrigger delete --name $(mq_trigger_name) --triggerns $(trigger_ns)
