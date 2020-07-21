@@ -60,6 +60,10 @@ update_mq_trigger:
 		--contenttype "application/json" --maxretries 3 \
 		--function $(func_name) --triggerns $(trigger_ns)
 
+update_cron_trigger:
+	FISSION_NAMESPACE=$(fission_namespace) fission timetrigger update --cron "$(cron_setting)" --function $(func_name) \
+		--name $(time_trigger_name) --triggerns $(trigger_ns)
+
 test_func:
 	FISSION_NAMESPACE=$(fission_namespace) fission fn test --name $(func_name) --fns $(func_ns)
 
@@ -76,6 +80,9 @@ remove_func_and_http_trigger:
 
 remove_mq_trigger:
 	FISSION_NAMESPACE=$(fission_namespace) fission mqtrigger delete --name $(mq_trigger_name) --triggerns $(trigger_ns)
+
+remove_cron_trigger:
+	FISSION_NAMESPACE=$(fission_namespace) fission timetrigger delete --name $(time_trigger_name) --triggerns $(trigger_ns)
 
 clean:
 	rm -f func.zip
