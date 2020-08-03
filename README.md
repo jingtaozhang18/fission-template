@@ -22,24 +22,41 @@
 
 #### 参数介绍
 
+##### 用户需要填写参数
 * `project_name`  项目名称
 * `module_name` 模块名称
 * `env_name` 运行环境的名称，目前支持`python`和`python-pillow`两个
 * `env_ns` 运行环境所在的命名空间，暂时均在default下
 * `func_name` 函数名称
+* `http_method` HTTP触发器的方法，可选项`GET|POST|PUT|DELETE|HEAD`
+* `topic_name` 若使用消息队列进行触发的话，可以填此配置
+* `cron_setting` 定时任务触发策略 `* * * * * ?` 或者 `@midnight`，`@every 1h30m`
+* `cron_param` 定时任务触发时，携带的参数，必须是json类型，注意转义字符
+
+##### 自动生成的参数
 * `func_ns = $(project_name)-$(module_name)` 函数将会提交到`$(func_ns)`的命名空间中。
 * `trigger_ns = $(func_ns)` 触发器所在的命名空间，默认和函数的命名空间一样
-* `http_method` HTTP触发器的方法，可选项`GET|POST|PUT|DELETE|HEAD`
-* `topic-name` 若使用消息队列进行触发的话，可以填此配置
+* `http_trigger_name = $(func_name)-http` HTTP触发器名称
+* `mq_trigger_name = $(func_name)-mq` 消息队列触发器名称
+* `time_trigger_name = $(func_name)-time` 定时任务触发器名称
 
 #### 命令介绍
-* `make publish` 会直接将函数提交到集群中，并且会自动创建http-trigger，**但不会创建mq-trigger**。
+* `make publish` 会直接将函数提交到集群中，并且会自动创建http-trigger，可以根据需求，修改publish的执行任务
+* `make create_func` 创建函数，会自动打包代码，并提交configmap和secrets的配置
+* `make create_http_trigger` 创建http请求的触发器
 * `make create_mq_trigger` 添加消息队列的触发，消费$(topic-name)中的消息，并将结果上传到到`$(func_ns)-$(func_name)-response`的topic中，处理错误的上传到`$(func_ns)-$(func_name)-error`的topic中，您可以通过删除命令中配置的`resptopic`和`errortopic`项来取消对应的上传。
-* `make update_func` 更新函数
+* `make create_cron_trigger` 创建定时任务触发器
+* `make apply_func_config` 更新configmap和secrets的配置
+* `make update_func` 更新函数，会自动打包代码，并提交configmap和secrets的配置
 * `make update_mq_trigger` 更新消息队列触发，多用于修改所要消费的topic
+* `make update_cron_trigger` 更新定时任务触发器
 * `make see_log` 查看函数日志，默认展示执行了这个命令后的函数日志，**需要使用开发机上的`/usr/local/bin`目录下的fission命令，若执行出错，请先`which fission`检查fission命令是否是`/usr/local/bin`下的fission**
-* `make remove_func_and_http_trigger` 会将创建的**函数**和**http-trigger**删除掉，**但不会删除mq-trigger**
+* `make remove_func` 删除函数
+* `make remove_http_trigger` 删除HTTP触发器
 * `make remove_mq_trigger` 删除消息队列触发，**慎用**。删除触发就相当于放弃了原来的消费组号，可能导致队列中的消息有遗漏处理的情况。
+* `make remove_cron_trigger` 删除定时任务触发器
+* `make package_source_code` 打包函数，会自动调用清理包的命令，保证打包干净
+* `make clean` 清理本地打包
 
 ### 使用模板创建自己的项目
 ``` bash

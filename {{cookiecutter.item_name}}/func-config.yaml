@@ -1,0 +1,35 @@
+## 配置函数需要使用的密钥
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: func-{{cookiecutter.func_name}}
+  namespace: {{cookiecutter.project_name}}-{{cookiecutter.module_name}}
+data:
+  logger_level: "debug"       # 设置函数的日志级别, 可选项：debug,info,warn,error
+
+  kafka-enabled: "n"          # 是否需要环境提供kafka连接句柄，n不需要，y需要（以下一样）
+  kafka-broker-list: ""       # kafka连接地址，留空使用全局默认设置
+
+  mysql-enabled: "n"          # 是否需要环境提供mysql连接句柄
+
+  redis-enabled: "n"          # 是否需要环境提供redis连接句柄
+
+  prometheus-enabled: "y"     # 是否需要环境提供监控的埋点上报
+  pushgateway-url: ""         # 埋点上报地址，留空使用全局默认配置
+
+  podcache-enabled: "y"       # 函数是否需要pod生命周期中的缓存
+
+---
+## 配置函数需要的密钥
+apiVersion: v1
+kind: Secret
+metadata:
+  name: func-{{cookiecutter.func_name}}
+  namespace: {{cookiecutter.project_name}}-{{cookiecutter.module_name}}
+## 加密密钥， base64 编码，可以在终端中使用如下命令进行生成 `echo -n 'your content' | base64`
+data:
+  default: "ZGVmYXVsdA=="
+
+## 明文密码
+stringData:
+  default: "default"
