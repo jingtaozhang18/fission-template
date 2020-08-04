@@ -8,11 +8,12 @@ data:
   logger_level: "debug"       # 设置函数的日志级别, 可选项：debug,info,warn,error
 
   kafka-enabled: "n"          # 是否需要环境提供kafka连接句柄，n不需要，y需要（以下一样）
-  kafka-broker-list: ""       # kafka连接地址，留空使用全局默认设置
+  kafka-broker-list: ""       # kafka连接地址，留空使用全局默认配置
 
   mysql-enabled: "n"          # 是否需要环境提供mysql连接句柄
 
   redis-enabled: "n"          # 是否需要环境提供redis连接句柄
+  redis-url: ""               # redis服务端地址，留空使用全局默认配置
 
   prometheus-enabled: "y"     # 是否需要环境提供监控的埋点上报
   pushgateway-url: ""         # 埋点上报地址，留空使用全局默认配置
