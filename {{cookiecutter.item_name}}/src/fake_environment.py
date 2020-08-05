@@ -182,6 +182,7 @@ class FissionBaseEnvironment:
         self.configs = {}  # 函数configmap信息
         self.secrets = {}  # 函数secrets信息
         self.cache = None  # Cache() # pod 周期级缓存对象
+        logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s')
         self.logger = logging.getLogger()
         self.logger.setLevel(logging.DEBUG)  # 设置日志的默认级别，在加载函数时会根据用户的环境变量进行修改
 
@@ -211,16 +212,15 @@ class FissionBaseEnvironment:
     def set_logger_level(self):
         """set logger level"""
         logger_level = self.configs.get(LOCAL_CONFIG_KEY, {}).get("logger_level", "debug")
-        level_map = {
+        level = {
             "debug": logging.DEBUG,
             "info": logging.INFO,
             "warn": logging.WARN,
             "error": logging.ERROR
-        }
-        if logger_level not in level_map:
-            self.logger.error("logger level: {} is illegal!".format(logger_level))
+        }.get(logger_level, logging.DEBUG)
         self.logger.debug("logger level will be {}".format(logger_level))
-        self.logger.setLevel(level_map.get(logger_level, logging.DEBUG))
+        # logging.basicConfig(level=level)
+        self.logger.setLevel(level)
 
     def set_prometheus_client(self):
         """set prometheus client. The default is enable it."""
