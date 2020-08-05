@@ -2,10 +2,10 @@
     "item_name": "fission-try(生成项目在文件夹中的名字)",
     "project_name": "xxx",
     "module_name": "xxx",
-    "env_name": "xxx",
+    "env_name": "python",
     "env_ns": "default",
     "func_name": "xxx",
     "http_method": "POST",
-    "topic_name": "jingtao-test-1",
+    "topic_name": "xxx",
     "cron_setting": "@every 1m"
 }

@@ -84,3 +84,12 @@ cd prometheus_client_python && python setup.py install
 #### 启用模拟
 在模拟环境和真实环境之间，是通过环境变量`fission_local`的y或者n来决定，当您设置环境变量fission_local为y时，就会启用模拟环境。
 模拟环境暂时不支持模拟post请求接入过程，因此您在main方法中通过`flask_request`获取内容的代码需要手动更改。
+
+### 常见问题
+
+#### 创建好项目之后，`main.py` 文件中`fake_environment`飙红
+您需要将`src`文件夹设置为source root
+
+#### 常见命名规范
+`topic_name` 不能使用中间横线
+其他例如`project-name`、`module_name`和`func_name`不能使用下划线
