@@ -23,6 +23,7 @@
 #### 参数介绍
 
 ##### 用户需要填写参数
+* `item_name` 项目创建在本地时文件夹的名字
 * `project_name`  项目名称
 * `module_name` 模块名称
 * `env_name` 运行环境的名称，目前支持`python`和`python-pillow`两个
@@ -64,4 +65,22 @@ cookiecutter https://git.huxiang.pro/base/fission/fission-template.git 或者
 cookiecutter git@git.huxiang.pro:base/fission/fission-template.git
 ```
 
-模板中的`item_name`是创建在本地文件夹的名字
+### 在本地调试您的项目
+为了方便用户在本地调试自己的项目，
+
+#### 模拟需要的文件
+您的项目下有几个文件是专门为本地调试而生成的：
+* `fake-fission-secret-configmap.yaml` 在本地调试时使用的fission全局配置，您可以根据本地测试环境改写该文件
+* `src/fake_environment.py` 在本地调试时，模拟环境由该文件生成，正常情况下您不需要更改此文件，如有无法解决的报错，请联系项目维护员
+
+#### 模拟需要的包
+在fission环境中，使用了一些定制版的包，暂时不支持官方途径安装，您需要按照如下命令，进行手动配置
+```bash
+# 为fission定制的prometheus client python版
+git clone https://git.jingtao.fun/jingtao/prometheus_client_python.git
+cd prometheus_client_python && python setup.py install
+```
+
+#### 启用模拟
+在模拟环境和真实环境之间，是通过环境变量`fission_local`的y或者n来决定，当您设置环境变量fission_local为y时，就会启用模拟环境。
+模拟环境暂时不支持模拟post请求接入过程，因此您在main方法中通过`flask_request`获取内容的代码需要手动更改。

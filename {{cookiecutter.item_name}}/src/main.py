@@ -1,7 +1,13 @@
 # -*- coding: utf-8 -*-
 from flask import request as flask_request
 import json
-from flask import g
+import os
+if os.environ.get("fission_local", "n") == "n":
+    from flask import g
+else:
+    from fake_environment import FissionBaseEnvironment
+
+    g = FissionBaseEnvironment()
 
 
 def main():
