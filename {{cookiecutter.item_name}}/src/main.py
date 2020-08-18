@@ -2,6 +2,7 @@
 from flask import request as flask_request
 import json
 import os
+
 if os.environ.get("fission_local", "n") == "n":
     from flask import g
 else:
@@ -10,7 +11,7 @@ else:
     g = FissionBaseEnvironment()
 
 
-def main():
+def main(localTest=False):
     # 日志的输出级别和下面介绍的功能开关请在func-config.yaml文件中进行配置
 
     #  打日志
@@ -57,5 +58,12 @@ def main():
 
     # 关于使用消息队列和定时任务触发时，读取输入的方法
     # 均是从flask_request.json变量中读取
+    if localTest:
+        info = {"": ""}
+    else:
+        info = flask_request.json
+    return json.dumps(info)
 
-    return json.dumps(flask_request.json)
+
+if __name__ == '__main__':
+    print(main(localTest=True))

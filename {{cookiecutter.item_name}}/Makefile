@@ -12,10 +12,10 @@ topic_name = {{cookiecutter.topic_name}}
 
 cron_setting = {{cookiecutter.cron_setting}}
 
-# 一定是字典结构
+# 一定是字典结构, 注意转义
 cron_param = {}
 
-# 默认生成的函数命名空间、触发器的命名空间、HTTP Triger 名称，以及 MQ Trigger 名称
+# 默认生成的函数命名空间、触发器的命名空间、HTTP Trigger 名称，以及 MQ Trigger 名称
 func_ns = $(project_name)-$(module_name)
 trigger_ns = $(func_ns)
 http_trigger_name = $(func_name)-http
@@ -78,6 +78,10 @@ test_func:
 see_log:
 	# 参数n 是从最新位置开始打印日志，若需要查看之前的日志，请删掉n
 	FISSION_NAMESPACE=$(fission_namespace) fission fn log --name $(func_name) --fns $(func_ns) -fn
+
+see_log_fromPod:
+	# 不具有通用性，只保证适应大多数场景，此外当函数更新或者
+	FISSION_NAMESPACE=$(fission_namespace) fission fn log --name $(func_name) --dbtype poddb --fns $(func_ns) -fn
 
 package_source_code: clean
 	zip -rq func.zip src

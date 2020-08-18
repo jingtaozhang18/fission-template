@@ -1,2 +1,4 @@
 func.zip
 .vscode/
+.idea/
+*.pyc
