@@ -6,7 +6,7 @@
 * 代码
 * 触发器
 
-其中的运行环境将会由基础设施组的同学进行运维，业务同学只需要指定使用基础设施组提供的运行环境即可。代码部分是函数的主要逻辑，其参数输入是Flask的一个request请求，输出需要转换成字符串结构。触发器是触发函数的组件，目前模板支持的是HTTP方式的触发器，即通过URL链接，即可调用部署在集群中的函数代码。
+其中的运行环境将会由基础设施组的同学进行运维，业务同学只需要指定使用基础设施组提供的运行环境即可。代码部分是函数的主要逻辑，其参数输入是Flask的一个request请求，输出需要转换成字符串结构。触发器是触发函数的组件，目前模板支持的是HTTP,消息队列和定时器三种方式进行触发
 
 
 在编写一个函数的时候，首先需要定位函数所属的`Project`和`Module`，然后再是函数名称`Func`。在脚本提交过程中，会将函数提交到`Project-Module`的命名空间下，您一定可以将资源提交到该命名空间下，但不一定能通过kubectl来获取该命名空间中的内容。
@@ -17,6 +17,12 @@
 * `main.py`文件，其内的`main`函数是函数调用的入口，HTTP请求的输入可以从request中读取到。
 * `requirements.txt`是项目需要的依赖
 * `build.sh`是项目的编译脚本，您可以跟需要进行更改
+
+src文件夹之外的是配置信息，主要如下：
+
+* `Makefile`是函数的部署脚本，所有make相关的命令都是和此文件相关
+* `func-config.yaml`是函数的局部配置文件，函数可以通过环境提供的句柄来获取该文件中的内容
+* `fake-fission-secret-configmap.yaml`是函数本地测试时使用的全局配置文件，fission不会使用该文件中的内容
 
 ### Makefile脚本
 
@@ -59,6 +65,12 @@
 * `make package_source_code` 打包函数，会自动调用清理包的命令，保证打包干净
 * `make clean` 清理本地打包
 
+### 函数配置文件
+
+模板会为每个函数创建一个局部配置文件，其中默认的配置项是为了对environment环境和日志输出项进行配置的。
+
+具体的配置说明在文档中有详细的说明
+
 ### 使用模板创建自己的项目
 ``` bash
 cookiecutter https://git.huxiang.pro/base/fission/fission-template.git 或者
@@ -91,5 +103,5 @@ cd prometheus_client_python && python setup.py install
 您需要将`src`文件夹设置为source root
 
 #### 常见命名规范
-`topic_name` 不能使用中间横线
-其他例如`project-name`、`module_name`和`func_name`不能使用下划线
+* `topic_name` 不能使用中间横线
+* `project-name`、`module_name`和`func_name`不能使用下划线

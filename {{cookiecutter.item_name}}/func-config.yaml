@@ -20,6 +20,8 @@ data:
 
   podcache-enabled: "y"       # 函数是否需要pod生命周期中的缓存
 
+  log-collection-type: ""     # 该函数所使用的日志收集组件，可以选择使用多个，使用逗号间隔开
+
 ---
 ## 配置函数需要的密钥
 apiVersion: v1
