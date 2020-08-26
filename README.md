@@ -57,7 +57,8 @@ src文件夹之外的是配置信息，主要如下：
 * `make update_func` 更新函数，会自动打包代码，并提交configmap和secrets的配置
 * `make update_mq_trigger` 更新消息队列触发，多用于修改所要消费的topic
 * `make update_cron_trigger` 更新定时任务触发器
-* `make see_log` 查看函数日志，默认展示执行了这个命令后的函数日志，**需要使用开发机上的`/usr/local/bin`目录下的fission命令，若执行出错，请先`which fission`检查fission命令是否是`/usr/local/bin`下的fission**
+* `make see_log` **即将废弃**，查看函数日志，默认展示执行了这个命令后的函数日志，**需要使用开发机上的`/usr/local/bin`目录下的fission命令，若执行出错，请先`which fission`检查fission命令是否是`/usr/local/bin`下的fission**
+* `see_log_fromPod` 从pod中直接查看函数的日志信息，同样需要使用开发机上的fission版本
 * `make remove_func` 删除函数
 * `make remove_http_trigger` 删除HTTP触发器
 * `make remove_mq_trigger` 删除消息队列触发，**慎用**。删除触发就相当于放弃了原来的消费组号，可能导致队列中的消息有遗漏处理的情况。

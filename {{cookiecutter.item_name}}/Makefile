@@ -80,7 +80,6 @@ see_log:
 	FISSION_NAMESPACE=$(fission_namespace) fission fn log --name $(func_name) --fns $(func_ns) -fn
 
 see_log_fromPod:
-	# 不具有通用性，只保证适应大多数场景，此外当函数更新或者
 	FISSION_NAMESPACE=$(fission_namespace) fission fn log --name $(func_name) --dbtype poddb --fns $(func_ns) -fn
 
 package_source_code: clean
