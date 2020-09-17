@@ -87,9 +87,13 @@ cookiecutter git@git.huxiang.pro:base/fission/fission-template.git
 * `src/fake_environment.py` 在本地调试时，模拟环境由该文件生成，正常情况下您不需要更改此文件，如有无法解决的报错，请联系项目维护员
 
 #### 模拟需要的包
-在fission环境中，使用了一些定制版的包，暂时不支持官方途径安装，您需要按照如下命令，进行手动配置
+在fission环境中，使用了一些定制版的包，可以通过gitlab的[镜像库](https://git.huxiang.pro/base/fission/prometheus-fission-client/-/packages)安装，也可以手动安装
 ```bash
 # 为fission定制的prometheus client python版
+# 首选方式, 具体配置请参考镜像库中的说明
+pip install prometheus-client --index-url https://__token__:<your_personal_token>@git.huxiang.pro/api/v4/projects/245/packages/pypi/simple
+
+# 其他方式
 git clone https://git.jingtao.fun/jingtao/prometheus_client_python.git
 cd prometheus_client_python && python setup.py install
 ```
