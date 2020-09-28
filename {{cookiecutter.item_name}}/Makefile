@@ -41,7 +41,7 @@ create_http_trigger:
 							   --url $(func_ns)/$(func_name) \
 							   --method $(http_method) \
 							   --name $(http_trigger_name)
-	echo "your httptrigger path is $(func_ns)/$(func_name)"
+	echo "your httptrigger path is /$(func_ns)/$(func_name)"
 
 create_mq_trigger:
 	FISSION_NAMESPACE=$(fission_namespace) fission mqtrigger create --name $(mq_trigger_name) --topic $(topic_name) \
@@ -60,6 +60,13 @@ update_func: package_source_code apply_func_config
 	FISSION_NAMESPACE=$(fission_namespace) fission function update --entrypoint "main.main" --buildcmd "./src/build.sh" --name $(func_name) --fns $(func_ns) \
 							--env $(env_name) --envns $(env_ns) --src func.zip --fntimeout $(fntimeout) --idletimeout $(idletimeout) \
 							--configmap fission-secret-configmap.fission-function-global-configmap --configmap func-$(func_name)
+
+update_http_trigger:
+	FISSION_NAMESPACE=$(fission_namespace) fission httptrigger update --name $(http_trigger_name) \
+							   --triggerNamespace $(trigger_ns) --function $(func_name)  \
+							   --url $(func_ns)/$(func_name) \
+							   --method $(http_method)
+	echo "your httptrigger path is /$(func_ns)/$(func_name)"
 
 update_mq_trigger:
 	# 若不需要resptopic和errortopic, 请自行删除这两个配置
